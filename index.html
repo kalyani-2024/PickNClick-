@@ -3,13 +3,28 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fix-It Forward Shop</title>
+    <title>PickNClick — Smart Shopping, One Click Away</title>
+    <meta name="description" content="PickNClick is a modern e-commerce store with curated products, smart search, and seamless checkout. Shop electronics, apparel, accessories, and home essentials." />
+    <meta name="theme-color" content="#0e0f13" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen" aria-hidden="true">
+        <div class="loading-screen__content">
+            <div class="loading-logo">Pick<span>N</span>Click</div>
+            <div class="loading-bar"><div class="loading-bar__fill"></div></div>
+        </div>
+    </div>
+
     <header class="site-header">
-        <a href="#" class="logo" aria-label="Fix It Forward Home">
-            Fix-It <span>Forward</span>
+        <a href="#" class="logo" aria-label="PickNClick Home">
+            Pick<span>N</span>Click
         </a>
         <nav class="nav" aria-label="Primary">
             <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">
@@ -17,44 +32,71 @@
             </button>
             <ul id="nav-menu" class="nav__list">
                 <li><a href="#hero">Home</a></li>
-                <li><a href="#catalog">Catalogue</a></li>
+                <li><a href="#catalog">Shop</a></li>
                 <li><a href="#cart-panel">Cart</a></li>
                 <li><a href="#footer">Help</a></li>
             </ul>
         </nav>
-        <button class="header-cart" data-open-cart="true">
+        <button class="header-cart" data-open-cart="true" aria-label="Open shopping cart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             Cart
             <span class="header-cart__count" aria-live="polite">0</span>
         </button>
     </header>
 
     <main>
+        <!-- ─── Hero Section ─── -->
         <section id="hero" class="hero" aria-labelledby="hero-title">
-            <div class="hero__content">
-                <h1 id="hero-title">Broken, But Beautiful Store</h1>
+            <canvas id="particle-canvas" class="hero__particles" aria-hidden="true"></canvas>
+            <div class="hero__content scroll-reveal">
+                <span class="hero__tag">✦ Premium Selection</span>
+                <h1 id="hero-title">
+                    Discover <span class="gradient-text">Products</span> You'll Love
+                </h1>
                 <p>
-                    A deliberately imperfect e-commerce experience. Your mission is to make it
-                    production-ready.
+                    Curated collection of premium products. Smart search, seamless checkout,
+                    and lightning-fast delivery—all in one click.
                 </p>
-                <button class="btn btn--primary" data-scroll-target="#catalog">
-                    Start Shopping
-                </button>
+                <div class="hero__cta">
+                    <button class="btn btn--primary btn--lg" data-scroll-target="#catalog">
+                        Start Shopping
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    <button class="btn btn--ghost btn--lg" data-scroll-target="#featured">
+                        View Featured
+                    </button>
+                </div>
+                <div class="hero__stats">
+                    <div class="hero__stat"><strong>2K+</strong><span>Happy Customers</span></div>
+                    <div class="hero__stat"><strong>200+</strong><span>Products</span></div>
+                    <div class="hero__stat"><strong>4.9</strong><span>Avg Rating</span></div>
+                </div>
             </div>
-            <div class="hero__highlight" aria-hidden="true">
-                <p>Today only: Shipping might or might not work.</p>
+            <div class="hero__highlight scroll-reveal" aria-hidden="true">
+                <div class="hero__promo-card">
+                    <span class="hero__promo-badge">Limited Offer</span>
+                    <p class="hero__promo-title">Up to 30% Off</p>
+                    <p>Use code <strong>PICKNCLICK</strong> at checkout</p>
+                </div>
             </div>
         </section>
 
+        <!-- ─── Product Catalog ─── -->
         <section id="catalog" class="catalog" aria-label="Product list">
-            <header class="catalog__header">
-                <h2>Featured Items</h2>
+            <header class="catalog__header scroll-reveal">
+                <div class="catalog__title-row">
+                    <h2>Featured Items</h2>
+                    <p class="catalog__subtitle">Handpicked products for you</p>
+                </div>
                 <div class="catalog__filters">
                     <label>
                         Sort by
                         <select id="sort-select">
                             <option value="recommended">Recommended</option>
-                            <option value="price-asc">Price: Low to High</option>
-                            <option value="price-desc">Price: High to Low</option>
+                            <option value="price-asc">Price: Low → High</option>
+                            <option value="price-desc">Price: High → Low</option>
+                            <option value="rating">Top Rated</option>
+                            <option value="name">Name A–Z</option>
                         </select>
                     </label>
                     <label>
@@ -62,12 +104,21 @@
                         <input
                             id="search-input"
                             type="search"
-                            placeholder="Search products"
+                            placeholder="🔍 Search products..."
                             autocomplete="off"
                         />
                     </label>
                 </div>
             </header>
+
+            <!-- Category Filter Pills -->
+            <div class="catalog__categories scroll-reveal">
+                <button class="category-pill active" data-category="all">All Products</button>
+                <button class="category-pill" data-category="electronics">⚡ Electronics</button>
+                <button class="category-pill" data-category="apparel">👟 Apparel</button>
+                <button class="category-pill" data-category="accessories">🎒 Accessories</button>
+                <button class="category-pill" data-category="home">🏠 Home & Living</button>
+            </div>
 
             <div class="catalog__grid" id="product-grid">
                 <!-- Products are rendered from JS. Intentionally left blank. -->
@@ -108,9 +159,10 @@
             </template>
         </section>
 
-        <aside id="cart-panel" class="cart" aria-label="Shopping cart" aria-live="polite">
+        <!-- ─── Cart Panel ─── -->
+        <aside id="cart-panel" class="cart cart--hidden" aria-label="Shopping cart" aria-hidden="true">
             <header class="cart__header">
-                <h2>Cart</h2>
+                <h2>🛒 Your Cart</h2>
                 <button class="cart__close" data-close-cart="true" aria-label="Close cart">
                     ×
                 </button>
@@ -131,7 +183,7 @@
                         <dt>Estimated Tax</dt>
                         <dd id="cart-tax">$0.00</dd>
                     </div>
-                    <div>
+                    <div class="cart__summary-total">
                         <dt>Total</dt>
                         <dd id="cart-total">$0.00</dd>
                     </div>
@@ -144,9 +196,81 @@
         </aside>
     </main>
 
+    <!-- ─── Product Detail Modal ─── -->
+    <div id="product-modal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal__overlay">
+            <div class="modal__container">
+                <button class="modal__close-btn" aria-label="Close">✕</button>
+                <div class="modal__content">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Checkout Modal ─── -->
+    <div id="checkout-modal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal__overlay">
+            <div class="modal__container modal__container--checkout">
+                <button class="modal__close-btn" onclick="closeCheckout()" aria-label="Close">✕</button>
+                <div class="checkout__steps">
+                    <div class="checkout__step" data-step="1"><span>1</span> Review</div>
+                    <div class="checkout__step" data-step="2"><span>2</span> Shipping</div>
+                    <div class="checkout__step" data-step="3"><span>3</span> Payment</div>
+                    <div class="checkout__step" data-step="4"><span>4</span> Done</div>
+                </div>
+                <div id="checkout-content" class="checkout__content">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Toast Container ─── -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- ─── Back to Top ─── -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+
     <footer id="footer" class="site-footer">
-        <p>© <span id="footer-year">2023</span> Fix-It Forward. All rights maybe reserved.</p>
-        <p class="site-footer__note">This is a demo store. Nothing you order will actually ship.</p>
+        <div class="footer__grid">
+            <div class="footer__brand">
+                <a href="#" class="logo logo--footer">Pick<span>N</span>Click</a>
+                <p>Your one-click destination for premium products. Curated, fast, reliable.</p>
+            </div>
+            <div class="footer__links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#catalog">Shop</a></li>
+                    <li><a href="#cart-panel">Cart</a></li>
+                </ul>
+            </div>
+            <div class="footer__links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer__newsletter">
+                <h4>Stay Updated</h4>
+                <p>Get exclusive deals and new arrivals.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Thanks for subscribing! 🎉', 'success'); this.reset();">
+                    <input type="email" placeholder="your@email.com" required />
+                    <button type="submit" class="btn btn--primary">→</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p>© <span id="footer-year">2023</span> PickNClick. All rights reserved.</p>
+            <p class="site-footer__note">Premium shopping experience, crafted with care.</p>
+        </div>
     </footer>
+
+    <script src="app.js"></script>
 </body>
 </html>
